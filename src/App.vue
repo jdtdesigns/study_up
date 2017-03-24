@@ -38,10 +38,11 @@ export default {
     getUserStatus() {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          this.$store.signed_in = true;
-          this.$store.uid = user.uid;
-          this.$store.photo = user.photoURL;
-          this.$store.email = user.email;
+          this.$store.state.signed_in = true;
+          this.$store.state.uid = user.uid;
+          this.$store.state.photo = user.photoURL;
+          this.$store.state.email = user.email;
+          this.$router.app.$emit('uid-set');
           this.$router.push('/dashboard');
         } else {
           this.$router.push('/');
@@ -53,7 +54,7 @@ export default {
     },    
     logoutUser() {
       firebase.auth().signOut();
-      this.$store.signed_in = false;
+      this.$store.state.signed_in = false;
       this.$router.push('/');
     },
     inviteUser(id) {
@@ -71,6 +72,7 @@ export default {
   },
   created() {
     this.getUserStatus();
+    // firebase.auth().signOut();
     // this.$router.app.$on('signIn', this.signIn);
     // this.$on('invite', this.inviteUser);
 //     firebase.database().ref('/users').push({

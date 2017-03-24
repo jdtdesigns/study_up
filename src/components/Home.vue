@@ -16,7 +16,12 @@
 			return {
 				
 			}
-		}	
+		},
+		methods: {
+	    signIn() {
+	      this.$router.app.$emit('signIn');
+	    }
+	  }
 	}
 </script>
 

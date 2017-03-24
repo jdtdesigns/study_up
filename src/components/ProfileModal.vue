@@ -1,16 +1,16 @@
 <template>
   <div class="modal"
-  :class="{'is-active': store.show_modal}">
+  :class="{'is-active': $store.state.show_modal}">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
       <div class="column">
-        <p class="modal-card-title">{{ store.update_profile ? 'Update' : 'Complete' }} Your Profile</p>
+        <p class="modal-card-title">{{ $store.state.update_profile ? 'Update' : 'Complete' }} Your Profile</p>
         <h4 class="subtitle is-6"
-        v-if="!store.update_profile"><em>*Must be completed to Join Groups</em></h4>
+        v-if="!$store.state.update_profile"><em>*Must be completed to Join Groups</em></h4>
       </div>
       <button class="delete"
-      @click="store.show_modal = false"
+      @click="$store.state.show_modal = false"
       ></button>
     </header>
     <section class="modal-card-body">
@@ -18,7 +18,7 @@
       <form>
         <div class="field">
           <p class="subtitle error is-6"
-          v-if="store.update_error">There was an error updating your profile. Please check your information.</p>
+          v-if="$store.state.update_error">There was an error updating your profile. Please check your information.</p>
         </div>
         <div class="field">
           <label class="label">Display Name</label>
@@ -80,7 +80,7 @@
         <div class="buttons field">
           <button class="button is-success"
           @click="updateProfile">Save changes</button>
-          <button class="button" @click.prevent="store.show_modal = false">Cancel</button>
+          <button class="button" @click.prevent="$store.state.show_modal = false">Cancel</button>
         </div>
       </form>
     </section>
@@ -90,10 +90,8 @@
 
 <script>
   export default {
-    template: '#modal',
     data() {
       return {
-        store: store,
         profile: {
           name: '',
           address: '',
@@ -115,11 +113,11 @@
         e.preventDefault();
         
         
-        const user = firebase.database().ref(`/users/${this.store.uid}`);
+        const user = firebase.database().ref(`/users/${this.$store.state.uid}`);
         
         user.set(this.profile)
           .then(() => {
-            this.store.update_error = false;
+            this.$store.state.update_error = false;
             this.profile = {
               name: '',
               address: '',
@@ -129,24 +127,25 @@
               profile_completed: true,
               is_online: true
             };
-            this.store.show_modal = false;
-            this.store.update_profile = false;
+            this.$store.state.show_modal = false;
+            this.$store.state.update_profile = false;
           })
-          .catch(err => this.store.update_error = true);
+          .catch(err => this.$store.state.update_error = true);
       },
       showProfile() {
-        const db = firebase.database().ref(`/users/${this.store.uid}`);
+        const db = firebase.database().ref(`/users/${this.$store.state.uid}`);
         
         db.once('value').then(user => {
           user = user.val();
-          
+          console.log('fired');
           this.profile = user;
-          this.store.update_profile = true;
-          this.store.show_modal = true;
+          this.$store.state.update_profile = true;
+          this.$store.state.show_modal = true;
         });
       }
     },
     created() {
+      console.log(this.$store.state.show_modal);
       this.$router.app.$on('update-profile', this.showProfile);
     }
   }

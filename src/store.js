@@ -11,7 +11,7 @@ export const store = new Vuex.Store({
 	  group_error: false,
 	  group_profile_error: false,
 	  update_error: false,
-	  update_profile: true,
+	  update_profile: false,
 	  uid: '',
 	  photo: '',
 	  email: '',

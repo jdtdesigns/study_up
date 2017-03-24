@@ -3,8 +3,17 @@ import App from './App.vue';
 import VueRouter from 'vue-router';
 import { routes } from './routes';
 import { store } from './store';
+import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(VueRouter);
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAAGS_itREZl72734WFAo6ZejDqDXNv_SE'
+    // v: 'OPTIONAL VERSION NUMBER',
+    // libraries: 'places', //// If you need to use place input 
+  }
+});
 
 
 const router = new VueRouter({

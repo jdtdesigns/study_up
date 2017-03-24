@@ -7,11 +7,11 @@
 					<h2 class="title is-5 nav-item">Study Up</h2>
 				</router-link>
 				<a class="nav-item is-tab is-hidden-mobile is-active"
-				v-if="$store.signed_in">Dashboard</a>
+				v-if="$store.state.signed_in">Dashboard</a>
 			</div>
 			
 			<span class="nav-toggle"
-				@click="$store.show_nav = !$store.show_nav">
+				@click="$store.state.show_nav = !$store.state.show_nav">
 			<span></span>
 			<span></span>
 			<span></span>
@@ -19,23 +19,23 @@
 		
 		
 		<div class="nav-right nav-menu"
-		:class="{'is-active': $store.show_nav}">
+		:class="{'is-active': $store.state.show_nav}">
 		
 		<a href="#" class="nav-item is-tab"
-		v-if="!$store.signed_in"
+		v-if="!$store.state.signed_in"
 		@click.prevent="signIn">Sign In With Google</a>
 		
 		<router-link 
 		to="/dashboard" 
 		class="nav-item is-tab is-hidden-tablet"
-		v-if="$store.signed_in">Dashboard</router-link>
+		v-if="$store.state.signed_in">Dashboard</router-link>
 		
 		<a href="#" class="nav-item is-tab"
-		v-if="!$store.show_modal"
+		v-if="!$store.state.show_modal && $store.state.signed_in"
 		@click.prevent="updateProfile">Profile</a>
 		
 		<a href="#" class="nav-item is-tab"
-		v-if="$store.signed_in"
+		v-if="$store.state.signed_in"
 		@click.prevent="logoutUser">Log out</a>
 		
 	</div>
