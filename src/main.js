@@ -8,12 +8,12 @@ Vue.use(VueRouter);
 
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 });
 
 new Vue({
   el: '#app',
-  mode: 'history',
   router,
   store,
   render: h => h(App)
