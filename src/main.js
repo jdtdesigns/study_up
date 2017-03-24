@@ -13,6 +13,7 @@ const router = new VueRouter({
 
 new Vue({
   el: '#app',
+  mode: 'history',
   router,
   store,
   render: h => h(App)
