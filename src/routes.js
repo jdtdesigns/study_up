@@ -1,5 +1,6 @@
 import Home from './components/Home.vue';
 import Dashboard from './components/Dashboard.vue';
+import { store } from './store';
 
 export const routes = [
 	{ path: '/', component: Home,
