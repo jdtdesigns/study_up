@@ -38,6 +38,7 @@ export default {
     getUserStatus() {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
+          console.log(user);
           this.$store.state.signed_in = true;
           this.$store.state.uid = user.uid;
           this.$store.state.photo = user.photoURL;
@@ -91,5 +92,30 @@ export default {
 </script>
 
 <style lang="scss">
+  .y-center {
+    align-items: center;
+  }
 
+  .modal {
+    .modal-card-head {
+      padding-top: 5px;
+      h4.subtitle {
+        margin-top: 5px;
+      }
+      button.delete {
+        position: relative;
+        top: -5px;
+      }
+    }
+    section {
+      padding-bottom: 40px;
+      .subtitle.error {
+        color: red;
+        font-weight: 400;
+      }
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+  }
 </style>

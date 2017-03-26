@@ -1,9 +1,56 @@
 <template>
-	<!-- <div id="map"></div> -->
-	<gmap-map style="width: 100%; height: 100%; position: absolute; left:0; top:0"
-        :center="{lat: 1.38, lng: 103.8}"
-        :zoom="12"
-    ></gmap-map>
+	<gmap-map
+				class="map"
+        :center="center"
+        :zoom="9"
+        :options="options"
+    >
+
+    	<gmap-marker
+    		 v-for="(marker, i) in markers"
+    		:key="i"
+    		:position="marker.position"
+    		:icon="{url: marker.icon}"
+    		:clickable="true"
+    		@click="showWindow(i)">
+
+    		<gmap-info-window 
+    			:opened="marker.show_window"
+    			@closeclick="marker.show_window = false">
+    			<div class="card">
+    				<div class="card-content">
+    					<div class="media">
+    						<div class="media-left">
+    							<figure class="image is-48x48">
+    								<img :src="marker.photo" alt="Student Image">
+    							</figure>
+    						</div>
+    						<div class="media-content">
+    							<p class="title is-4">{{ marker.name }}</p>
+    							<p class="subtitle is-6">{{ marker.email }}</p>
+    						</div>
+    					</div>
+    					<div class="content">
+    						<div class="columns">
+    							<div class="column is-6">
+    								<p class="subtitle is-6 is-marginless">Language:</p>
+    								<p class="subtitle is-6 is-marginless">Project:</p>
+    							</div>
+    							<div class="column is-6">
+    								<p class="subtitle is-6 is-marginless">{{ marker.language }}</p>
+    								<p class="subtitle is-6 is-marginless">{{ marker.project }}</p>
+    							</div>
+    						</div>
+    						<button class="button is-primary"
+    							@click="invite(marker.id, marker.name)">Invite to Group</button>
+    					</div>
+    				</div>
+    			</div>
+    		</gmap-info-window>
+
+    	</gmap-marker>
+
+    </gmap-map>
 </template>
 
 <script>
@@ -12,115 +59,64 @@
 	export default {
 		data() {
 			return {
-				// store: store  
+				center: {lat: 33.778280, lng: -84.395031},
+				options: {
+					styles: map_styles
+				},
+				markers: [],
 			};
 		},
 		methods: {
-		// 	refresh() {
-		// 		setTimeout(() => { this.setupMap(); }, 500);
-		// 	},
-		// 	setupMap() {
+			showWindow(index) {
+				this.markers[index].show_window = true;
+			},
+			getUserLocations() {
+				const db = firebase.database().ref('/users');
 
-		// 		try { google; }
-		// 		catch(e) {
-		// 		    if ( e.name == "ReferenceError" ) {
-		// 		        this.refresh();
-		// 		        return;
-		// 		    }
-		// 		}
+				db.on('child_added', user => {
+					const uid = user.key;
+					user = user.val();
 
-		// 		const map = new google.maps.Map(document.getElementById('map'), {
-		// 			center: {lat: 33.778280, lng: -84.395031},
-		// 			styles: map_styles,
-		// 			zoom: 9
-		// 		});
-		// 		const geocoder = new google.maps.Geocoder();
+					const icon = user.is_online ? 'https://image.ibb.co/kf8KTv/studyup_online.png' :
+								'https://image.ibb.co/ijda1F/studyup_offline.png';
 
-
-		// 		const db = firebase.database().ref('/users');
-
-		// 		db.on('child_added', user => {
-		// 			let uid = user.uid, address;
-		// 			user = user.val();
-
-		// 			if ( user ) {
-		// 				address = user.address;
-
-		// 				geocoder.geocode( { 'address': address}, (results, status) => {
-		// 					if (status == 'OK') {
-
-		// 						const icon = user.is_online ?
-		// 						'https://image.ibb.co/kf8KTv/studyup_online.png' :
-		// 						'https://image.ibb.co/ijda1F/studyup_offline.png';
-
-		// 						const marker = new google.maps.Marker({
-		// 							map: map,
-		// 							icon: icon,
-		// 							scale: 1,
-		// 							position: results[0].geometry.location
-		// 						});
-
-		// 						const email = user.show_email ? this.$store.state.email : 'Email Not Shown';
-
-		// 						const windowMarkup = 
-		// 						`<div class="card">
-		// 						<div class="card-content">
-		// 							<div class="media">
-		// 								<div class="media-left">
-		// 									<figure class="image is-48x48">
-		// 									<img src="${this.$store.state.photo}" alt="Student Image">
-		// 									</figure>
-		// 								</div>
-		// 								<div class="media-content">
-		// 									<p class="title is-4">${user.name}</p>
-		// 									<p class="subtitle is-6">${email}</p>
-		// 								</div>
-		// 							</div>
-		// 							<div class="content">
-		// 								<div class="columns">
-		// 									<div class="column is-6">
-		// 										<p class="subtitle is-6 is-marginless">Language:</p>
-		// 										<p class="subtitle is-6 is-marginless">Project:</p>
-		// 									</div>
-		// 									<div class="column is-6">
-		// 										<p class="subtitle is-6 is-marginless">${user.language}</p>
-		// 										<p class="subtitle is-6 is-marginless">${user.project}</p>
-		// 									</div>
-		// 								</div>
-		// 								<button class="button is-primary"
-		// 								onclick="vm.$emit('invite', '${this.$store.state.uid}')">
-		// 								Invite to Group</button>
-		// 							</div>
-		// 						</div>
-		// 					</div>`,
-
-		// 					infoWindow = new google.maps.InfoWindow({
-		// 						content: windowMarkup
-		// 					});
-
-
-		// 					marker.addListener('click', () => infoWindow.open(map, marker));
-		// 				} else {
-		// 					alert('Geocode was not successful for the following reason: ' + status);
-		// 				}
-		// 			});
-		// 			}
-		// 		});
-		// 	}
-		// },
-		// mounted() {
-		// 	this.setupMap();
+					axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${user.address}&key=AIzaSyAAGS_itREZl72734WFAo6ZejDqDXNv_SE`)
+					.then(res => {
+						this.markers.push({
+							position: res.data.results[0].geometry.location,
+							icon: icon,
+							show_window: false,
+							name: user.name,
+							email: user.show_email ? user.email : 'Email Not Shown',
+							photo: user.photo,
+							language: user.language,
+							project: user.project,
+							id: uid
+						});
+					});
+				});
+			},
+			invite(id, name) {
+				this.$emit('invite', {id: id, name: name});
+			}
+		},
+		created() {
+			this.getUserLocations();
 		}
 	}
 </script>
 
 <style lang="scss">
-	#map {
+	.map {
 	  height: 400px;
 	  width: 100%;
 	  margin: 0 auto;
 	  @media (min-width: 768px) {
 	    width: 75%;
+	  }
+
+	  .card {
+	  	min-width: 230px;
 	  }
 	}
 </style>

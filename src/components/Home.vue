@@ -26,5 +26,7 @@
 </script>
 
 <style lang="scss">
-	
+	.signin-btn {
+    width: 230px;
+  }
 </style>

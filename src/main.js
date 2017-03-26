@@ -4,8 +4,10 @@ import VueRouter from 'vue-router';
 import { routes } from './routes';
 import { store } from './store';
 import * as VueGoogleMaps from 'vue2-google-maps';
+import axios from 'axios';
 
 Vue.use(VueRouter);
+window.axios = axios;
 
 Vue.use(VueGoogleMaps, {
   load: {

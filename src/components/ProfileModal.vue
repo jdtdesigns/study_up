@@ -99,7 +99,9 @@
           language: '',
           school: '',
           profile_completed: true,
-          show_email: true
+          show_email: true,
+          email: this.$store.state.email,
+          photo: this.$store.state.photo
         }
       };
     },
@@ -137,7 +139,6 @@
         
         db.once('value').then(user => {
           user = user.val();
-          console.log('fired');
           this.profile = user;
           this.$store.state.update_profile = true;
           this.$store.state.show_modal = true;
@@ -145,7 +146,6 @@
       }
     },
     created() {
-      console.log(this.$store.state.show_modal);
       this.$router.app.$on('update-profile', this.showProfile);
     }
   }

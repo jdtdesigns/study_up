@@ -40,7 +40,7 @@
           
           <div class="buttons field">
             <button class="button is-success"
-            @click="addGroup">Submit</button>
+            @click="addGroup">Create</button>
             <button class="button"                                   
              @click.prevent="closeModal">Cancel</button>
           </div>
