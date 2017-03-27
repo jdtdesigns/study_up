@@ -5,8 +5,11 @@ import { routes } from './routes';
 import { store } from './store';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import axios from 'axios';
+import _ from 'lodash';
+
 
 Vue.use(VueRouter);
+Vue.use(_);
 window.axios = axios;
 
 Vue.use(VueGoogleMaps, {
