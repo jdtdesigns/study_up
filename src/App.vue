@@ -38,7 +38,6 @@ export default {
     getUserStatus() {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          console.log(user);
           this.$store.state.signed_in = true;
           this.$store.state.uid = user.uid;
           this.$store.state.photo = user.photoURL;
@@ -57,15 +56,6 @@ export default {
       firebase.auth().signOut();
       this.$store.state.signed_in = false;
       this.$router.push('/');
-    },
-    inviteUser(id) {
-      const db = firebase.database().ref(`/users/${id}`);
-      
-      db.once('value')
-      .then(user => {
-        // this.invited_user = user.val();
-        this.show_invite_modal = true;
-      });
     }
   },
   components: {
