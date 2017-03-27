@@ -50,7 +50,7 @@
           user_ref.child('/invites')
           .child(group.toLowerCase()).set({
             leader: this.$store.state.name
-          })
+          });
 
        },
         closeModal() {
