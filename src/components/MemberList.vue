@@ -56,7 +56,19 @@
 		},
 
 		methods: {
+			refresh() {
+				clearTimeout(window.refreshGroups);
+				window.refreshGroups = setTimeout(() => {
+					this.getAllGroups();
+				}, 500);
+			},
+
 			getMemberList() {
+				if ( !this.$store.state.uid ) {
+					this.refresh();
+					return;
+				}
+
 				const user_ref = firebase.database().ref(`/users/${this.$store.state.uid}`),
 							users_ref = firebase.database().ref('/users'),
 							groups_ref = firebase.database().ref('/groups');
@@ -75,7 +87,7 @@
 							_.map(users, user => {
 								if ( user.groups && user.groups.hasOwnProperty(group) 
 									&& user.name != this.$store.state.name )
-									this.members.push(user);
+									this.members.push(user); 
 							});
 
 						});
