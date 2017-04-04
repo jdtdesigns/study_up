@@ -85,23 +85,25 @@
 
 					user = user.val();
 
-					const icon = user.is_online ? 'https://image.ibb.co/kf8KTv/studyup_online.png' :
+					if ( user.name != this.$store.state.name ) {
+						const icon = user.is_online ? 'https://image.ibb.co/kf8KTv/studyup_online.png' :
 								'https://image.ibb.co/ijda1F/studyup_offline.png';
 
-					axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${user.address}&key=AIzaSyAAGS_itREZl72734WFAo6ZejDqDXNv_SE`)
-					.then(res => {
-						this.markers.push({
-							position: res.data.results[0].geometry.location,
-							icon: icon,
-							show_window: false,
-							name: user.name,
-							email: user.show_email ? user.email : 'Email Not Shown',
-							photo: user.photo,
-							language: user.language,
-							project: user.project,
-							id: uid
+						axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${user.address}&key=AIzaSyAAGS_itREZl72734WFAo6ZejDqDXNv_SE`)
+						.then(res => {
+							this.markers.push({
+								position: res.data.results[0].geometry.location,
+								icon: icon,
+								show_window: false,
+								name: user.name,
+								email: user.show_email ? user.email : 'Email Not Shown',
+								photo: user.photo,
+								language: user.language,
+								project: user.project,
+								id: uid
+							});
 						});
-					});
+					}
 				});
 			},
 			updateOnlineStatus(uid, status) {
