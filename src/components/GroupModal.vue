@@ -57,7 +57,8 @@
       return {
         group: {
           stack: '',
-          name: ''
+          name: '',
+          members: 1
         }
       };
     },
@@ -69,20 +70,17 @@
         
         e.preventDefault();
         
-        
-        
         const db = firebase.database(),
               groups = db.ref('/groups'),
               group_name = this.group.name.toLowerCase(),
               user = db.ref(`/users/${this.$store.state.uid}`);
         
-        
         user.once('value')
         .then(data => {
           if ( data.val().profile_completed ) {
-            this.group.leader = this.$store.state.uid;
-            groups.child(group_name).set(this.group).then(() => {
-              user.child(`/groups/${group_name}`).set(true);
+            this.group.created_by = this.$store.state.uid;
+            user.child(`/groups/${group_name}`).set(true).then(() => {
+              groups.child(group_name).set(this.group);
               this.group.name = '';
               this.group.stack = '';
               this.closeModal();            
@@ -92,9 +90,7 @@
             this.$store.state.group_profile_error = true;
           }
         });
-        
-        
-        
+        this.$router.push('groups');
       },
       closeModal() {
         this.$store.state.show_group_modal = false;

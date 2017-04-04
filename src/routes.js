@@ -1,5 +1,7 @@
 import Home from './components/Home.vue';
 import Dashboard from './components/Dashboard.vue';
+import GMap from './components/GMap.vue';
+import GroupList from './components/GroupList.vue';
 import { store } from './store';
 
 export const routes = [
@@ -10,5 +12,23 @@ export const routes = [
       else
         next();
   }},
-	{ path: '/dashboard', component: Dashboard }
+	{ path: '/dashboard', component: Dashboard,
+		children: [
+			{ path: '', component: GMap },
+			{ 
+				path: 'groups', 
+				name: 'groups', 
+				component: GroupList 
+			},
+			{ 
+				path: 'mygroups', 
+				name: 'user-groups', 
+				component: GroupList 
+			},
+			{ 
+				path: 'invites', 
+				name: 'invites', 
+				component: GroupList 
+			}
+		] }
 ];

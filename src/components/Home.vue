@@ -19,7 +19,7 @@
 		},
 		methods: {
 	    signIn() {
-	      this.$router.app.$emit('signIn');
+	      this.$emit('signin');
 	    }
 	  }
 	}

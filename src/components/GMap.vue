@@ -12,7 +12,8 @@
     		:position="marker.position"
     		:icon="{url: marker.icon}"
     		:clickable="true"
-    		@click="showWindow(i)">
+    		@click="showWindow(i)"
+    		:title="marker.name">
 
     		<gmap-info-window 
     			:opened="marker.show_window"
@@ -42,7 +43,7 @@
     							</div>
     						</div>
     						<button class="button is-primary"
-    							@click="invite(marker.id, marker.name)">Invite to Group</button>
+    							@click="invite(marker.id, marker.name, $event)">Invite to Group</button>
     					</div>
     				</div>
     			</div>
@@ -74,7 +75,14 @@
 				const db = firebase.database().ref('/users');
 
 				db.on('child_added', user => {
-					const uid = user.key;
+					const uid = user.key,
+								user_ref = db.child(uid);
+					
+					user_ref.on('child_changed', child => {
+						if ( child.key == 'is_online' )
+							this.updateOnlineStatus(uid, child.val());
+					});
+
 					user = user.val();
 
 					const icon = user.is_online ? 'https://image.ibb.co/kf8KTv/studyup_online.png' :
@@ -96,8 +104,15 @@
 					});
 				});
 			},
-			invite(id, name) {
-				this.$emit('invite', {id: id, name: name});
+			updateOnlineStatus(uid, status) {
+				const user = _.find(this.markers, {'id': uid});
+
+				user.icon = status ? 'https://image.ibb.co/kf8KTv/studyup_online.png' :
+				'https://image.ibb.co/ijda1F/studyup_offline.png';
+			},
+			invite(id, name, e) {
+				e.target.classList.add('is-loading');
+				this.$emit('invite', {id: id, name: name, button: e.target});
 			}
 		},
 		created() {

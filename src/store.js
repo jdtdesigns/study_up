@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
 	  show_nav: false,
 	  show_modal: false,
 	  show_group_modal: false,
+	  show_member_list: false,
 	  group_error: false,
 	  group_profile_error: false,
 	  update_error: false,

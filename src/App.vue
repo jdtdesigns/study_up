@@ -4,7 +4,8 @@
       @signin="signIn"
       @logout="logoutUser"></top-bar>
     
-    <router-view></router-view>
+    <router-view
+      @signin="signIn"></router-view>
   </div>
 </template>
 
@@ -77,6 +78,13 @@ export default {
 //     window.onunload = () => {
 //       console.log('worked');
 //     };
+
+    // firebase.database().ref('/groups').child('not mine').set({
+    //   created_by: '-KfrR-THtJmMiYQbDNvf',
+    //   members: 1,
+    //   name: 'Not Mine',
+    //   stack: 'HTML/CSS'
+    // });
   }  
 }
 </script>
@@ -103,6 +111,9 @@ export default {
         color: red;
         font-weight: 400;
       }
+    }
+    hr {
+      margin: 10px 0 18px;
     }
     .buttons {
       margin-top: 20px;
